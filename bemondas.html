@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family:sans-serif;padding:20px">
+<h2>MÁV bemondás</h2>
+<button id="b" style="padding:20px;font-size:20px;width:100%;background:#002F6C;color:white;border-radius:12px">
+▶ CSENGŐ + NŐI HANG LEJÁTSZÁS
+</button>
+<script>
+b.onclick=()=>{
+  let ctx=new AudioContext();
+  let t=(f,d,s)=>{
+    let o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.value=f;o.connect(g);g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.8,s);
+    g.gain.exponentialRampToValueAtTime(0.01,s+d);
+    o.start(s);o.stop(s+d)
+  };
+  let n=ctx.currentTime;
+  t(880,0.35,n);t(659,0.7,n+0.4);
+  setTimeout(()=>{
+    let u=new SpeechSynthesisUtterance(`Figyelem! Figyelem! Pályakarbantartás miatt Pilisvörösvár és Esztergom között vágányzár van érvényben. A vonatok helyett vonatpótló autóbuszok közlekednek. A pótlóbuszok Pilisvörösvár vasútállomás és Esztergom autóbusz-állomás között minden megállóhelyen megállnak. A járatok tíz percenként indulnak, bármely szolgáltatótól: MÁV, BKK és VOLÁN közös üzemeltetésében. A BKK nyolcszáznyolcvanas, a VOLÁN nyolcszáztízes és a helyi járatok is igénybe vehetők. Kérjük, indulás előtt tájékozódjanak! Köszönjük utasaink megértését.`);
+    u.lang='hu-HU';u.rate=0.9;u.pitch=1.1;
+    let v=speechSynthesis.getVoices().find(x=>x.lang.includes('hu'));
+    if(v) u.voice=v;
+    speechSynthesis.speak(u)
+  },900)
+};
+</script>
+</body>
+</html>
